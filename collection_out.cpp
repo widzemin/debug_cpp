@@ -33,37 +33,37 @@ namespace Debug {
 
     template<typename T>
     std::ostream& operator << (std::ostream &out, std::vector<T> lhs) {
-        out << Join(lhs, ',');
+        out << '[' << Join(lhs, ',') << ']';
         return out;
     }
 
     template<typename Key, typename Value>
     std::ostream& operator << (std::ostream &out, std::map<Key, Value> lhs) {
-        out << Join(lhs, ',');
+        out << '{' << Join(lhs, ',') << '}';
         return out;
     }
 
     template<typename T>
     std::ostream& operator << (std::ostream &out, std::set<T> lhs) {
-        out << Join(lhs, ',');
+        out << '(' << Join(lhs, ',') << ')';
         return out;
     }
 
     template<typename Key, typename Value>
     std::ostream& operator << (std::ostream &out, std::unordered_map<Key, Value> lhs) {
-        out << Join(lhs, ',');
+        out << '{' << Join(lhs, ',') << '}';
         return out;
     }
 
     template<typename T>
     std::ostream& operator << (std::ostream &out, std::unordered_set<T> lhs) {
-        out << Join(lhs, ',');
+        out << '(' << Join(lhs, ',') << ')';
         return out;
     }
 
     template<typename T>
     std::ostream& operator << (std::ostream &out, std::deque<T> lhs) {
-        out << Join(lhs, ',');
+        out << '[' << Join(lhs, ',') << ']';
         return out;
     }
 
