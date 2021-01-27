@@ -1,16 +1,15 @@
 #include <sstream>
-#include <exception>
+#include <stdexcept>
 #include <iostream>
 #include <string>
-#include <map>
-#include <set>
+#include <ostream>
 
 template<class T, class U>
 void AssertEqual(const T& t, const U& u, const std::string& hint) {
     if (t != u) {
         std::ostringstream os;
-        os << "Assertion failed: " << t << " != " << u
-           << " hint: " << hint;
+        os << "Assertion failed: " << t << " != " << u << "\n"
+           << "Hint: " << hint;
         throw std::runtime_error(os.str());
     }
 }
@@ -19,8 +18,8 @@ template<class T, class U>
 void AssertNotEqual(const T& t, const U& u, const std::string& hint) {
     if (t == u) {
         std::ostringstream os;
-        os << "Assertion failed: " << t << " == " << u
-           << " hint: " << hint;
+        os << "Assertion failed: " << t << " == " << u << "\n"
+           << "Hint: " << hint;
         throw std::runtime_error(os.str());
     }
 }
@@ -29,8 +28,8 @@ template<class T, class U>
 void AssertLess(const T& t, const U& u, const std::string& hint) {
     if (t >= u) {
         std::ostringstream os;
-        os << "Assertion failed: " << t << " >= " << u
-           << " hint: " << hint;
+        os << "Assertion failed: " << t << " >= " << u << "\n"
+           << "Hint: " << hint;
         throw std::runtime_error(os.str());
     }
 }
@@ -39,8 +38,8 @@ template<class T, class U>
 void AssertLessOrEqual(const T& t, const U& u, const std::string& hint) {
     if (t > u) {
         std::ostringstream os;
-        os << "Assertion failed: " << t << " > " << u
-           << " hint: " << hint;
+        os << "Assertion failed: " << t << " > " << u << "\n"
+           << "Hint: " << hint;
         throw std::runtime_error(os.str());
     }
 }
@@ -58,7 +57,8 @@ public:
             std::cerr << test_name << " OK" << std::endl;
         } catch (std::runtime_error& e) {
             ++fail_count;
-            std::cerr << test_name << " fail: " << e.what() << std::endl;
+            std::cerr << test_name << " " << "fail:" << std::endl;
+            std::cerr << e.what() << std::endl;
         } catch (...) {
             ++fail_count;
             std::cerr << "Unknown exception" << std::endl;
@@ -75,3 +75,48 @@ public:
 private:
     size_t fail_count = 0;
 };
+
+#define RUN_TEST(tr, func)                  \
+  tr.RunTest(func, #func)
+
+#define ASSERT_EQUAL(x, y) {                \
+  ostringstream os;                         \
+  os << #x << " != " << #y << "\n"          \
+    << "In file : " << __FILE__ << "\n"     \
+    << "In line : " << __LINE__;            \
+  AssertEqual(x, y, os.str());              \
+}
+
+#define ASSERT(x) {                         \
+  ostringstream os;                         \
+  os << #x << " is false" << "\n"           \
+    << "In file : " << __FILE__ << "\n"     \
+    << "In line : " << __LINE__;            \
+  Assert(x, os.str());                      \
+}
+
+#define ASSERT_NOT_EQUAL(x, y) {            \
+    ostringstream os;                       \
+    os << #x << " == " << #y << "\n"        \
+    << "In file : " << __FILE__ << "\n"     \
+    << "In line : " << __LINE__;            \
+    AssertNotEqual(x, y, os.str());         \
+}
+
+
+#define ASSERT_LESS(x, y) {                 \
+    ostringstream os;                       \
+    os << #x << " >= " << #y << "\n"        \
+    << "In file : " << __FILE__ << "\n"     \
+    << "In line : " << __LINE__;            \
+    AssertLess(x, y, os.str());             \
+}
+
+#define ASSERT_LESS_OR_EQUAL(x, y) {        \
+    ostringstream os;                       \
+    os << #x << " > " << #y << "\n"         \
+    << "In file : " << __FILE__ << "\n"     \
+    << "In line : " << __LINE__;            \
+    AssertLessOrEqual(x, y, os.str());      \
+}
+
